@@ -31,8 +31,15 @@ public class Crawler {
 
         Document pageDocument = Jsoup.connect(pageURL).get();
 
-        // TODO: Parse static contents first
+        // Parse static contents first
+        Elements staticElements = pageDocument.select("img[src~=(?i)]");
 
+        for (Element staticElement : staticElements) {
+          String link = staticElement.attr("src");
+
+          pageLinks.addStaticElement(link);
+          System.out.println(link);
+        }
 
         // Now parse all links
         Elements pageElements = pageDocument.select("a[href]");
@@ -43,7 +50,9 @@ public class Crawler {
           pageLinks.addLink(link);
           System.out.println(link);
 
+          //
           // Visit the link if its internal to the domain
+          //
           if (!pageLinks.isExternalLink(link)) {
             parsePage(link);
           }

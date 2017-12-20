@@ -17,11 +17,15 @@ public class PageLinks {
   }
 
   public void addLink(String url) {
-    if (url.startsWith(rootDomain)) {
+    if (!isExternalLink(url)) {
       internalLinks.add(url);
     } else {
       externalLinks.add(url);
     }
+  }
+
+  public void addStaticElement(String url) {
+    staticLinks.add(url);
   }
 
   public boolean alreadyVisited(String url) {

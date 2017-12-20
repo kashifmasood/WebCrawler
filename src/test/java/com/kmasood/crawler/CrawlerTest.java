@@ -29,8 +29,8 @@ public class CrawlerTest {
 
     PageLinks pagelinks  = crawler.getPageLinks();
 
-    assertEquals("External Links",2, pagelinks.getExternalLinks().size());
-    assertEquals("Internal Links",1, pagelinks.getInternalLinks().size());
+    assertEquals("External Links",3, pagelinks.getExternalLinks().size());
+    assertEquals("Internal Links",4, pagelinks.getInternalLinks().size());
     assertEquals("Static Links",2, pagelinks.getStaticLinks().size());
   }
 }
