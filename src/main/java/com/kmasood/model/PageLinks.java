@@ -1,5 +1,7 @@
 package com.kmasood.model;
 
+import com.kmasood.crawler.Crawler;
+
 import java.util.HashSet;
 
 /**
@@ -11,25 +13,23 @@ import java.util.HashSet;
  */
 public class PageLinks {
 
-  private String rootDomain;
+  private String pageUrl;
   private HashSet<String> internalLinks;
   private HashSet<String> externalLinks;
   private HashSet<String> staticLinks;
 
-  private String output; // Stores the output for printing
-
   private static final String ROOT_LABEL =     "-> ";
-  private static final String INTERNAL_LABEL = "\n     internal link: ";
-  private static final String EXTERNAL_LABEL = "\n     external link: ";
-  private static final String IMAGE_LABEL =    "\n     image: ";
+  private static final String INTERNAL_LABEL = "     internal link: ";
+  private static final String EXTERNAL_LABEL = "     external link: ";
+  private static final String IMAGE_LABEL =    "     image: ";
 
-  public PageLinks(String rootDomainURL) {
-    rootDomain = rootDomainURL;
+  public PageLinks(String url) {
+    pageUrl = url;
     internalLinks = new HashSet<>();
     externalLinks = new HashSet<>();
     staticLinks = new HashSet<>();
 
-    output = ROOT_LABEL + rootDomain;
+    System.out.println(ROOT_LABEL + pageUrl);
   }
 
   /**
@@ -37,33 +37,33 @@ public class PageLinks {
    * @param url - URL link in a page to record
    */
   public void addLink(String url) {
-    if (url.equals(rootDomain)) {
+    if (url.equals(pageUrl)) {
       return;
     }
 
     // Check if we already have this
-    if (!alreadyVisited(url) ) {
+    if (!alreadyRecorded(url) ) {
       if (!isExternalLink(url)) {
         internalLinks.add(url);
-        output += INTERNAL_LABEL + url;
+        System.out.println(INTERNAL_LABEL + url);
       } else {
         externalLinks.add(url);
-        output += EXTERNAL_LABEL + url;
+        System.out.println(EXTERNAL_LABEL + url);
       }
     }
   }
 
   public void addStaticElement(String url) {
     staticLinks.add(url);
-    output += IMAGE_LABEL + url;
+    System.out.println(IMAGE_LABEL + url);
   }
 
   /**
-   * Helper method for determining if the url has already been visited or not
+   * Helper method for determining if the url has already been seen and we have it recorded
    * @param url - URL of the page to check
-   * @return True if link has been visited
+   * @return True if link has been recorded
    */
-  public boolean alreadyVisited(String url) {
+  public boolean alreadyRecorded(String url) {
     boolean foundIt = false;
 
     if (internalLinks.contains(url)) {
@@ -77,12 +77,14 @@ public class PageLinks {
     return foundIt;
   }
 
-  public String getRootDomain() {
-    return rootDomain;
+  public String getPageURL() {
+    return pageUrl;
   }
 
   public boolean isExternalLink(String url) {
-    return (!url.startsWith(rootDomain));
+
+    boolean t = !url.startsWith(Crawler.DOMAIN);
+     return (!url.startsWith(Crawler.DOMAIN));
   }
 
   public HashSet<String> getInternalLinks() {
@@ -95,10 +97,5 @@ public class PageLinks {
 
   public HashSet<String> getStaticLinks() {
     return staticLinks;
-  }
-
-  @Override
-  public String toString() {
-    return output;
   }
 }
