@@ -6,8 +6,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -18,6 +18,9 @@ import java.util.List;
  *
  */
 public class Crawler {
+  public static String DOMAIN;
+
+  private HashSet<String> visitedURLs;
 
   // This is where we will store data for each page we visit
   private List<PageLinks> pageLinksList;
@@ -27,8 +30,30 @@ public class Crawler {
    * @param rootDomainURL - URL of the page to start crawl from
    */
   public Crawler(String rootDomainURL) {
+    // Set the starting point domain
+    DOMAIN = extractDomainName(rootDomainURL);
+    visitedURLs = new HashSet<String>();
     pageLinksList = new ArrayList<>();
     parsePage(rootDomainURL);
+  }
+
+  /**
+   * Helper function to extract the domain name from the given URL
+   * @param url - url to extract domain name from
+   * @return domain name
+   */
+  private String extractDomainName(String url) {
+    String domainName = url;
+
+    // Lets get passed the http:// or https:// first
+    int slashslash = url.indexOf("//") + 2;
+    int indexOfSlash = url.indexOf('/', slashslash);
+
+    if (indexOfSlash > 0) {
+      domainName = url.substring(0, url.indexOf('/', slashslash));
+    }
+
+    return domainName;
   }
 
   /**
@@ -37,7 +62,7 @@ public class Crawler {
    */
   private void recordPageData(PageLinks pageLinks) {
     pageLinksList.add(pageLinks);
-    System.out.println(pageLinks.toString());
+//    System.out.println(pageLinks.toString());
   }
 
   public List<PageLinks> getPageLinksList() {
@@ -55,15 +80,16 @@ public class Crawler {
     PageLinks pageLinks = new PageLinks(pageURL);
 
     // Make sure we haven't visited this page already
-    if (!pageLinks.alreadyVisited(pageURL)) {
+    if (!visitedURLs.contains(pageURL)) {
 
       try {
         pageLinks.addLink(pageURL);
+        visitedURLs.add(pageURL);
 
         Document pageDocument = Jsoup.connect(pageURL).get();
 
         // Parse static contents first
-        Elements staticElements = pageDocument.select("img[src~=(?i)]");
+        Elements staticElements = pageDocument.select("img[src~=(?i)]"); // TODO: fix this
 
         for (Element staticElement : staticElements) {
           String link = staticElement.attr("src");
@@ -79,19 +105,21 @@ public class Crawler {
 
           pageLinks.addLink(link);
 
+          // Perform some minor checks before crawling...
+          // Strip away any anchor tags or parameters at the end of a URL to avoid incorrect identification
+          if (link.contains("#")) {
+            link = link.substring(0, link.indexOf('#'));
+          } else if (link.contains("?")) {
+            link = link.substring(0, link.indexOf('?'));
+          }
+
           //
           // Visit the link if its internal to the domain only
           //
           if (!pageLinks.isExternalLink(link)) {
-            // Perform some minor checks before crawling...
-            // Strip away any anchor tags at the end of a URL to avoid parsing the page more than once
-            if (link.contains("#")) {
-              link = link.substring(0, link.indexOf('#'));
-            }
-
             // Don't crawl the main root page again.
             // If we don't check for this, it will cause an infinite loop (in case of anchor tags)
-            if (!pageLinks.getRootDomain().equals(link)) {
+            if (!pageLinks.getPageURL().equals(link)) {
               parsePage(link);
             }
           }

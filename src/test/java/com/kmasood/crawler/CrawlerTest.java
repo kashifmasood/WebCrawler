@@ -67,8 +67,8 @@ public class CrawlerTest {
     PageLinks pageLinks = list.get(0);
     assertNotNull("No page data found", pageLinks);
 
-    assertEquals("External Links",3, pageLinks.getExternalLinks().size());
-    assertEquals("Internal Links",3, pageLinks.getInternalLinks().size());
+    assertEquals("External Links",2, pageLinks.getExternalLinks().size());
+    assertEquals("Internal Links",4, pageLinks.getInternalLinks().size());
     assertEquals("Static Links",2, pageLinks.getStaticLinks().size());
   }
 
