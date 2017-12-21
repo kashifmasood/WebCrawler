@@ -11,11 +11,7 @@ As each URL is visited, the following information is captured and printed:
 
 ## Build / Run
 
-To build the application:
-
-```
-cd <<project directory>>
-```
+To build the application with JUnit test execution:
 
 ```
 ./gradlew clean build
@@ -27,6 +23,19 @@ To run the application, pass in the URL of the website you want to start crawlin
 ```
 ./gradlew run -Purl='http://cnn.com'
 ```
+
+## Unit Tests
+All unit test cases use the html pages in GitHub Pages for the kmasood account: WebCrawler repo.<br><br>
+This was used to ensure that testing is done in a real life scenario of a web page and not a local static pages
+(specially when crawling internal domain URLs).
+<br>
+<br>The HTML pages used for unit testing are part for the GIT repo under the following location:
+- "WebCrawler/html/"
+
+The HTML pages are published to the GitHub Pages website from the MASTER branch only.
+<br><br>
+If you want to add more test data to the HTML pages, please make sure you push your changes to the MASTER
+ branch before running your test cases.
 
 ## Third-party Dependencies
 
