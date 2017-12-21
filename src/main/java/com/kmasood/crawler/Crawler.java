@@ -100,8 +100,8 @@ public class Crawler {
         // Don't forget to save the page information
         this.recordPageData(pageLinks);
 
-      } catch (IOException e) {
-        System.err.println("Error parsing page: " + pageURL + " - " + e.getMessage());
+      } catch (Exception e) {
+        System.err.println("Error visiting URL " + pageURL + " - " + e.toString());
       }
     }
   }
@@ -114,7 +114,7 @@ public class Crawler {
     if (args.length > 0) {
       new Crawler(args[0]);
     } else {
-      System.err.println("Please provide a valid website URL as a parameter.\nExample: Crawler.main http://google.com");
+      System.err.println("Please provide a fully formed URL as a parameter.\nExample: http://google.com");
     }
   }
 }
