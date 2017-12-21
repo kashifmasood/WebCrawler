@@ -39,8 +39,15 @@ to visit external URL's provided that the code is enhanced to limit the number o
 The appication utilizes the jsoup libraries to parse html contents for easy implementation. The solution could be
 implemented with standard java libraries, at the expense of additional hundreds of lines of code and complexity. 
 
+## Current Limitations
+- Single threaded which impacts performance
+- No maximum limit to how deep to walk a websites
+- The logic is not smart enough to conclude that http://www.google.com and http://google.com are the same domains
+
+## Future Considerations
 This is a simple command line java application which is meant for demonstration purposes only. A more scalable production 
 ready version of such an application could include some the following features:
 - Multi-threaded processing 
 - Awareness of Robots.txt on each website to respect exclusion standard
 - Service based design to allow for scalability and reuse in a broader application architecture
+- More structured output which can be consumed by consumer easily
