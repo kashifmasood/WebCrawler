@@ -1,39 +1,46 @@
-## Welcome to GitHub Pages
+# Simple WebCrawler
 
-You can use the [editor on GitHub](https://github.com/kashifmasood/WebCrawler/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+A simple Java web crawler application. Given a starting URL, the application visits all pages within the domain, but does not follow any external sites.
 
-<a href="http://google.com">Google Link</a>
+Information about each page visited is maintained with the following:
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- Links to other pages under the same domain
+- Links to external URLs
+- Static links to images 
 
-### Markdown
+## Build / Run
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+To build the application:
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+cd <<project directory>>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+```
+./gradlew clean build
+```
 
-### Jekyll Themes
+To run the application, pass in the URL of the website you want to start crawling from using the '-Purl' argument (make sure to pass in the full URL including http://):
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kashifmasood/WebCrawler/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```
+./gradlew run -Purl='http://cnn.com'
+```
 
-### Support or Contact
+##Third-party Dependencies
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+The application utlizes [jsoup](https://jsoup.org) HTTP parsing library to easily parse web page contents.
+
+
+##Description
+This application demostrates a simple logic to crawl websites. 
+Although the application currently is restricted to visit pages only under the given domain, it could be extended 
+to visit external URL's provided that the code is enhanced to limit the number of websites to visit.
+ 
+The appication utilizes the jsoup libraries to parse html contents for easy implementation. The solution could be
+implemented with standard java libraries, at the expense of additional hundreds of lines of code and complexity. 
+
+This is a simple command line java application which is meant for demonstration purposes only. A more scalable production 
+ready version of such an application could include some the following features:
+- Multi-threaded processing 
+- Awareness of Robots.txt on each website to respect exclusion standard
+- Service based design to allow for scalability and reuse in a broader application architecture

@@ -2,11 +2,27 @@ group 'com.kmasood'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+mainClassName = 'com.kmasood.crawler.Crawler'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.kmasood.crawler.Crawler'
+    }
+}
+
+run {
+    if (project.hasProperty('url')) {
+        args findProperty('url')
+    }
+
 }
 
 dependencies {
