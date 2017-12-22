@@ -89,7 +89,7 @@ public class Crawler {
         Document pageDocument = Jsoup.connect(pageURL).get();
 
         // Parse static contents first
-        Elements staticElements = pageDocument.select("img[src~=(?i)]"); // TODO: fix this
+        Elements staticElements = pageDocument.select("img[src]");
 
         for (Element staticElement : staticElements) {
           String link = staticElement.attr("src");
